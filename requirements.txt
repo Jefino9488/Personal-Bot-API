@@ -1,0 +1,9 @@
+
+uvicorn
+psycopg2-binary
+sqlalchemy
+pgvector
+python-dotenv
+sentence-transformers
+PyMuPDF
+requests

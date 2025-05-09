@@ -1,0 +1,54 @@
+name: Build and Publish Docker Image
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lowercase repository owner
+        id: lowercase
+        run: echo "REPO_OWNER=$(echo ${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+
+      - name: Download latest resume.pdf from Resume-Builder
+        run: |
+          LATEST_URL=$(curl -s https://api.github.com/repos/Jefino9488/Resume-Builder/releases/latest \
+            | grep "browser_download_url.*resume.pdf" \
+            | cut -d '"' -f 4)
+          echo "Downloading from $LATEST_URL"
+          curl -L -o resume.pdf "$LATEST_URL"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: ${{ github.event_name == 'push' }}
+          tags: |
+            ghcr.io/${{ env.REPO_OWNER }}/personal-bot-api:${{ github.sha }}
+            ghcr.io/${{ env.REPO_OWNER }}/personal-bot-api:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -1,0 +1,51 @@
+# Python cache and artifacts
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+*.pyd
+*.pyo
+*.log
+
+# Pydantic cache
+.pdm.toml
+*.mypy_cache/
+.pyre/
+
+# FastAPI docs cache
+openapi.json
+
+# Environment files
+.env
+.env.*
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Editor/IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.tar
+*.pid
+*.sock
+docker-compose.override.yml
+
+# PDF and data files
+*.pdf
+*.csv
+*.sqlite3
+*.db
+*.bak
+
+# Application-specific artifacts
+app.log
+resume.pdf

@@ -1,16 +1,18 @@
-version: '3.8'
 services:
   app:
     build: .
     ports:
-      - "8000:8000"
+      - "8001:8001"
+      - "9090:9090"
     environment:
       - DATABASE_URL=postgresql+psycopg2://user:password@db:5432/dbname
-      - EMBEDDING_MODEL=all-MiniLM-L6-v2
+      - REDIS_URL=redis://redis:6379/0
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
       - db
-
+      - redis
+    volumes:
+      - ./resume.pdf:/app/resume.pdf
   db:
     image: pgvector/pgvector:pg16
     environment:
@@ -21,6 +23,10 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
 volumes:
   pgdata:

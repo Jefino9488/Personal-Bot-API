@@ -1,4 +1,4 @@
-
+fastapi
 uvicorn
 psycopg2-binary
 sqlalchemy
@@ -7,3 +7,10 @@ python-dotenv
 sentence-transformers
 PyMuPDF
 requests
+redis
+cachetools
+prometheus-client
+fastapi-limiter
+pydantic
+tenacity
+httpx

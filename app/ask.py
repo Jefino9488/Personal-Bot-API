@@ -1,14 +1,15 @@
-from sqlalchemy.sql import text
-from app.db import get_db, ContextChunk
-from app.gemini import ask_gemini
-from sentence_transformers import SentenceTransformer
-import os
-import logging
-import time
-from cachetools import TTLCache
-import asyncio
-from functools import lru_cache
 import hashlib
+import logging
+import os
+import time
+from functools import lru_cache
+
+from cachetools import TTLCache
+from sentence_transformers import SentenceTransformer
+from sqlalchemy.sql import text
+
+from app.db import get_db
+from app.gemini import ask_gemini
 
 # Get configuration from environment variables
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")

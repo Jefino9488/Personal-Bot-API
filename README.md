@@ -40,7 +40,7 @@ A FastAPI application that answers questions based on personal context loaded fr
    ```bash
    copy .env.example .env
    ```
-   
+
 4. Update the `.env` file with your Gemini API key and other settings.
 
 5. Place your resume PDF file in the root directory as `resume.pdf`.
@@ -143,6 +143,32 @@ Prometheus metrics are available at port 9090 when `ENABLE_METRICS` is set to `t
 - `app/db.py`: Database connection and models
 - `app/context_loader.py`: PDF loading and context embedding
 - `app/ask.py`: Question handling logic
+- `app/gemini.py`: Integration with Google Gemini API
+- `app/config.py`: Centralized configuration management
+- `tests/`: Unit tests for the application
+
+### Testing
+
+Run the tests with pytest:
+
+```bash
+pytest tests/
+```
+
+For test coverage report:
+
+```bash
+pytest tests/ --cov=app --cov-report=term
+```
+
+### CI/CD Pipeline
+
+The project includes a GitHub Actions workflow that:
+
+1. Runs linting with flake8
+2. Performs security checks with safety
+3. Runs tests with coverage reporting
+4. Builds and publishes the Docker image to GitHub Container Registry
 
 ## License
 

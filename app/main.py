@@ -7,9 +7,12 @@ from pydantic import BaseModel, Field, field_validator
 from app.db import init_db
 from app.context_loader import load_and_store_context
 from app.ask import handle_question, handle_question_async
+from app.config import (
+    RATE_LIMIT, RATE_LIMIT_PERIOD, REDIS_URL,
+    ENABLE_METRICS, METRICS_PORT, RESUME_PATH
+)
 import logging
 import time
-import os
 import redis.asyncio as redis
 from prometheus_client import Counter, Histogram, start_http_server
 from typing import Optional
@@ -24,13 +27,6 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-
-# Get configuration from environment variables
-RATE_LIMIT = int(os.getenv("RATE_LIMIT", "100"))
-RATE_LIMIT_PERIOD = int(os.getenv("RATE_LIMIT_PERIOD", "60"))
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-ENABLE_METRICS = os.getenv("ENABLE_METRICS", "true").lower() == "true"
-METRICS_PORT = int(os.getenv("METRICS_PORT", "9090"))
 
 # Lazy-init Prometheus metrics
 REQUEST_COUNT = None
@@ -106,8 +102,8 @@ async def startup():
         logger.info("Database initialized successfully.")
 
         # Load and embed PDF context
-        logger.info("Loading PDF context...")
-        load_and_store_context("resume.pdf")
+        logger.info(f"Loading PDF context from {RESUME_PATH}...")
+        load_and_store_context(RESUME_PATH)
         logger.info("PDF context loaded successfully.")
 
         # Initialize Prometheus metrics

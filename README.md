@@ -1,5 +1,7 @@
 # Personal Bot API
 
+![Security Checks](https://github.com/jefino9488/PersonalBotApi/actions/workflows/security.yml/badge.svg)
+
 A FastAPI application that answers questions based on personal context loaded from a resume PDF. The application uses vector embeddings and the Gemini API to provide accurate responses to questions about the resume content.
 
 ## Features

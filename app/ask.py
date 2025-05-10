@@ -9,7 +9,7 @@ from sentence_transformers import SentenceTransformer
 from sqlalchemy.sql import text
 
 from app.db import get_db
-from app.gemini import ask_gemini
+from app.gemini import ask_gemini, ask_gemini_async
 
 # Get configuration from environment variables
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")

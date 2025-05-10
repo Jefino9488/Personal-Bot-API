@@ -36,9 +36,11 @@ jobs:
 
       - name: Run security checks
         run: |
-          safety check
+          safety scan
 
       - name: Run tests with coverage
+        env:
+          DATABASE_URL: "sqlite:///:memory:"
         run: |
           pytest tests/ --cov=app --cov-report=xml
 

@@ -7,14 +7,19 @@ import os
 from dotenv import load_dotenv
 import logging
 from contextlib import contextmanager
+from sqlalchemy.engine.url import make_url
 
 load_dotenv()
 logger = logging.getLogger(__name__)
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL environment variable is not set.")
+
 DB_POOL_SIZE = int(os.getenv("DB_POOL_SIZE", "20"))
 DB_MAX_OVERFLOW = int(os.getenv("DB_MAX_OVERFLOW", "10"))
 DB_POOL_TIMEOUT = int(os.getenv("DB_POOL_TIMEOUT", "30"))
+is_sqlite = make_url(DATABASE_URL).get_backend_name() == "sqlite"
 
 # Configure engine with connection pooling
 engine = create_engine(
@@ -40,7 +45,7 @@ class ContextChunk(Base):
     id = Column(Integer, primary_key=True, index=True)
     source = Column(String, nullable=False)  # e.g., "resume.pdf"
     content = Column(Text, nullable=False)
-    embedding = Column(Vector(384))  # 384 = size of MiniLM embeddings
+    embedding = Column(Vector(384) if not is_sqlite else String)  # fallback for SQLite
 
     # Create an index on the source column for faster filtering
     __table_args__ = (
